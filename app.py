@@ -2,7 +2,7 @@ from flask import Flask, render_template, request, send_file
 from transformers import MarianMTModel, MarianTokenizer
 
 
-import pymupdf as fitz
+import fitz
 
 import pytesseract
 from PIL import Image
