@@ -1,11 +1,15 @@
 import os
-import fitz  # PyMuPDF
+import subprocess
+
+# Force reinstall PyMuPDF to avoid missing module issues
+subprocess.run(["pip", "install", "--upgrade", "pymupdf"])
+
+import fitz  # Now, import after ensuring installation
 from flask import Flask, render_template, request, send_file
 from transformers import MarianMTModel, MarianTokenizer
 import pytesseract
 from PIL import Image
 from fpdf import FPDF
-
 
 
 
@@ -149,7 +153,7 @@ def download_file(filename):
     return send_file(os.path.join('outputs', filename), as_attachment=True)
     
 if __name__ == "__main__":
-    port = int(os.environ.get("PORT", 5000))  # Railway assigns a PORT dynamically
+    port = int(os.environ.get("PORT", 10000))  # Railway assigns a PORT dynamically
     app.run(host="0.0.0.0", port=port)
 
 
