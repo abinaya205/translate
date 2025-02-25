@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Book Translation</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css">
+    <style>
+        /* Position the logo at the top left */
+        .logo {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            width: 150px;
+        }
+
+        /* Button color */
+        .btn-primary {
+            background-color: #62b6aa;
+            border-color: #62b6aa;
+        }
+
+        .btn-primary:hover {
+            background-color: #4b9b8e;
+            border-color: #4b9b8e;
+        }
+
+        /* Spacing Fix */
+        .container {
+            position: relative;
+            padding-top: 120px; /* Creates space below the logo */
+        }
+
+        /* Flipbook loader styles */
+        .loader {
+            display: none; /* Initially hidden */
+            margin: 20px auto;
+            text-align: center;
+        }
+
+        .book {
+            border: 4px solid #62b6aa;
+            width: 60px;
+            height: 45px;
+            position: relative;
+            perspective: 150px;
+            display: inline-block;
+        }
+
+        .page {
+            display: block;
+            width: 30px;
+            height: 45px;
+            border: 4px solid #62b6aa;
+            border-left: 1px solid #4b9b8e;
+            position: absolute;
+            right: -4px;
+            top: -4px;
+            background: #4b9b8e;
+            transform-style: preserve-3d;
+            transform-origin: left center;
+        }
+
+        .book .page:nth-child(1) {
+            animation: pageTurn 1.2s cubic-bezier(0, .39, 1, .68) 1.6s infinite;
+        }
+
+        .book .page:nth-child(2) {
+            animation: pageTurn 1.2s cubic-bezier(0, .39, 1, .68) 1.45s infinite;
+        }
+
+        .book .page:nth-child(3) {
+            animation: pageTurn 1.2s cubic-bezier(0, .39, 1, .68) 1.2s infinite;
+        }
+
+        @keyframes pageTurn {
+            0% { transform: rotateY(0deg); }
+            40%, 100% { background: #62b6aa; transform: rotateY(-180deg); }
+        }
+
+        /* Loading message */
+        .loading-message {
+            display: none;
+            color: #62b6aa;
+            font-size: 1.2em;
+            margin-top: 10px;
+            text-align: center;
+        }
+
+    </style>
+</head>
+<body>
+
+    <!-- Site Logo -->
+    <img src="{{ url_for('static', filename='logo.png') }}" alt="Site Logo" class="logo">
+
+    <div class="container my-5">
+        <h2>Book Translation</h2>
+
+        <form id="uploadForm" method="POST" enctype="multipart/form-data">
+            <!-- Upload PDF File -->
+            <div class="mb-3">
+                <label for="book_file" class="form-label">Upload PDF Book</label>
+                <input type="file" class="form-control" id="book_file" name="book_file" required>
+            </div>
+
+            
+            <!-- Input Language -->
+            <div class="mb-3">
+                <label for="input_language" class="form-label">Input Language</label>
+                <select class="form-select" id="input_language" name="input_language" required>
+                    <option value="en">English</option>
+                    <option value="es">Spanish</option>
+                    <option value="fr">French</option>
+                    <option value="ru">Russian</option>
+                    <option value="de">German</option>
+                </select>
+            </div>
+
+            <!-- Output Language -->
+            <div class="mb-3">
+                <label for="output_language" class="form-label">Output Language</label>
+                <select class="form-select" id="output_language" name="output_language" required>
+                    <option value="en">English</option>
+                    <option value="es">Spanish</option>
+                    <option value="fr">French</option>
+                    <option value="ru">Russian</option>
+                    <option value="de">German</option>
+                </select>
+            </div>
+            
+            <!-- Submit Button -->
+            <button type="submit" class="btn btn-primary" id="submitBtn">Translate</button>
+        </form>
+
+        <!-- Loader (Flipbook) -->
+        <div class="loader" id="loader">
+            <div class="book">
+                <div class="page"></div>
+                <div class="page"></div>
+                <div class="page"></div>
+            </div>
+        </div>
+        <h2 class="loading-message" id="loadingMessage">Loading... Please wait.</h2>
+
+
+        <!-- Spinner that shows during translation -->
+        <div id="loadingSpinner" style="display: none;">
+            <p>Translating... Please wait.</p>
+            <div class="spinner-border" role="status">
+                <span class="visually-hidden">Loading...</span>
+            </div>
+        </div>
+
+        <!-- Display Download Link after Translation -->
+        {% if translated_pdf_url %}
+        <hr>
+        <h3>Translation Complete!</h3>
+        <a href="{{ url_for('download_file', filename=translated_pdf_url.split('/')[-1]) }}" class="btn btn-success" target="_blank">Download Translated Book</a>
+        {% endif %}
+
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.min.js"></script>
+
+    <script>
+        document.getElementById("uploadForm").addEventListener("submit", function(event) {
+            document.getElementById("loader").style.display = "block";  // Show loader
+            document.getElementById("loadingMessage").style.display = "block"; // Show message
+            document.getElementById("submitBtn").disabled = true; // Disable button to prevent multiple clicks
+        });
+    </script>
+
+</body>
+</html>
