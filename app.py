@@ -1,12 +1,13 @@
 from flask import Flask, render_template, request, send_file
 from transformers import MarianMTModel, MarianTokenizer
+import sys
+sys.modules["frontend"] = None
 import fitz  # PyMuPDF
 import pytesseract
 from PIL import Image
 from fpdf import FPDF
 import os
-import sys
-sys.modules["frontend"] = None
+
 
 
 
