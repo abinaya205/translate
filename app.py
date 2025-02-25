@@ -1,8 +1,9 @@
 from flask import Flask, render_template, request, send_file
 from transformers import MarianMTModel, MarianTokenizer
-import sys
-sys.modules["frontend"] = None
-import fitz  # PyMuPDF
+
+
+import pymupdf as fitz
+
 import pytesseract
 from PIL import Image
 from fpdf import FPDF
