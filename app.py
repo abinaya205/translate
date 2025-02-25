@@ -5,6 +5,9 @@ import pytesseract
 from PIL import Image
 from fpdf import FPDF
 import os
+import sys
+sys.modules["frontend"] = None
+import fitz  # PyMuPDF
 
 
 app = Flask(__name__, template_folder=".")
