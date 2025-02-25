@@ -1,15 +1,11 @@
 import os
-import subprocess
-
-# Force reinstall PyMuPDF to avoid missing module issues
-subprocess.run(["pip", "install", "--upgrade", "pymupdf"])
-
-import fitz  # Now, import after ensuring installation
+import fitz  # PyMuPDF
 from flask import Flask, render_template, request, send_file
 from transformers import MarianMTModel, MarianTokenizer
 import pytesseract
 from PIL import Image
 from fpdf import FPDF
+
 
 
 
